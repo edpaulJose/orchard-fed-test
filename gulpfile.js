@@ -3,6 +3,7 @@ const sass = require("gulp-sass")(require("sass"));
 const concat = require("gulp-concat");
 const terser = require("gulp-terser");
 const browserSync = require("browser-sync").create();
+const ghPages = require("gulp-gh-pages"); // Add this for deploying to GitHub Pages
 
 // Path configuration
 const paths = {
@@ -56,8 +57,17 @@ function watchFiles() {
   watch("dist/*.html").on("change", browserSync.reload); // Watch HTML changes
 }
 
+// Deploy to GitHub Pages (new task)
+function deploy() {
+  return src("dist/**/*")
+    .pipe(ghPages());
+}
+
 // Default Gulp Task
 exports.default = series(
   parallel(compileSass, minifyJs, copyImages, copyHtml),
   watchFiles
 );
+
+// Deploy Task
+exports.deploy = deploy;
