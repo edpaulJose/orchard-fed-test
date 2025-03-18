@@ -47,58 +47,57 @@ const COMPONENT_TWO_MOCKDATA = {
   ]
 };
 
-
 document.addEventListener("DOMContentLoaded", () => {
   // Load dynamic content and then set up modal functionality
   window.onload = function() {
-    loadData(COMPONENT_ONE_MOCKDATA, COMPONENT_TWO_MOCKDATA);
-    setUpModalFunctionality(); // Call the function to set up the modal after content is loaded
+    loadData(COMPONENT_ONE_MOCKDATA, COMPONENT_TWO_MOCKDATA); // Load content data
+    setUpModalFunctionality(); // Set up modal behavior after content is loaded
   };
 
   // Function to set up modal functionality
   function setUpModalFunctionality() {
-    // Log anchor clicks (if needed)
+    // Log anchor clicks for modal triggers
     document.querySelectorAll("a.modal-trigger").forEach(anchor => {
       anchor.addEventListener("click", (event) => {
-        event.preventDefault(); // Prevent default anchor behavior
-        console.log("Anchor clicked:", event.target?.alt || "No image"); // Log the alt text of the image
+        event.preventDefault(); // Prevent default behavior
+        console.log("Anchor clicked:", event.target?.alt || "No image"); // Log clicked image alt text
       });
     });
 
-    // Modal functionality
+    // Modal elements
     const modal = document.getElementById("modal");
     const modalImg = document.getElementById("modal-img");
     const closeModal = document.querySelector(".close");
 
-    // Ensure modal elements exist
+    // Ensure modal elements exist before setting up event listeners
     if (!modal || !modalImg || !closeModal) {
       console.log("Error: Modal elements not found.");
       return;
     }
 
-    // Show the modal with the image source
+    // Show modal with image source when clicked
     document.querySelectorAll(".modal-trigger").forEach(anchor => {
       anchor.addEventListener("click", (event) => {
-        event.preventDefault(); // Prevent default anchor behavior
-        const img = anchor.querySelector("img"); // Get the image inside the anchor
+        event.preventDefault(); // Prevent default behavior
+        const img = anchor.querySelector("img"); // Get image inside anchor
         if (img) {
-          modalImg.src = img.src; // Set the modal image source
-          modalImg.alt = img.alt; // Set the modal image alt text
+          modalImg.src = img.src; // Set modal image source
+          modalImg.alt = img.alt; // Set modal image alt text
           modal.style.display = "flex"; // Show the modal
           modal.setAttribute("aria-hidden", "false"); // Make modal visible to screen readers
-          closeModal.focus(); // Set focus to the close button for accessibility
+          closeModal.focus(); // Focus on close button for accessibility
           console.log("Modal displayed with image:", img.src);
         }
       });
     });
 
-    // Close modal when clicking the close button
+    // Close modal when close button is clicked
     closeModal.addEventListener("click", () => {
       modal.style.display = "none";
       modal.setAttribute("aria-hidden", "true"); // Hide modal from screen readers
     });
 
-    // Close modal when clicking outside the modal content
+    // Close modal when clicking outside modal content
     modal.addEventListener("click", (event) => {
       if (event.target === modal) {
         modal.style.display = "none";
@@ -106,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Close modal with the Escape key
+    // Close modal with Escape key
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape" && modal.style.display === "flex") {
         modal.style.display = "none";
@@ -116,10 +115,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+// Function to load data dynamically into components
 function loadData(component1Data, component2Data) {
-  // Populate images dynamically
+  // Populate image grid dynamically
   const imageGrid = document.getElementById('image-grid');
-  component1Data.images.forEach((image) => {
+  // Get only top 3 images
+  component1Data.images?.slice(0, 3).forEach((image) => {
     const imageElement = document.createElement('a');
     imageElement.href = image.link;
     imageElement.classList.add('modal-trigger');
@@ -155,4 +156,3 @@ function loadData(component1Data, component2Data) {
     colorContainer.appendChild(colorBlock);
   });
 }
-
